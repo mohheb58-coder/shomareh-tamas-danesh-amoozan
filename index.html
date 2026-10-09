@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرم اطلاعات خانوادگی</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Header کوچکتر */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 28px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 18px;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 11px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .card-header h2 {
+            color: #333;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #333;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        /* Input های بزرگتر */
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 15px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 12px;
+            width: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin-top: 10px;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .btn-call {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            flex: 1;
+            padding: 10px;
+            font-size: 11px;
+        }
+
+        .btn-message {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            flex: 1;
+            padding: 10px;
+            font-size: 11px;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 2px solid #34d399;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 2px solid #f87171;
+        }
+
+        .message.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 2px solid #60a5fa;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* پیام شناور */
+        .floating-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 16px 24px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.4s ease-out;
+            min-width: 300px;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .floating-message.success {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+        }
+
+        .floating-message.error {
+            background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+            color: white;
+        }
+
+        .floating-message.info {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            color: white;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -30px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+            to {
+                opacity: 0;
+                transform: translate(-50%, -30px);
+            }
+        }
+
+        .floating-message.hiding {
+            animation: slideUp 0.3s ease-in forwards;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Search Bar بزرگتر */
+        .search-bar {
+            display: grid;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .search-bar label {
+            display: block;
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .search-bar select {
+            padding: 16px !important;
+            font-size: 15px !important;
+            border: 2px solid #d1d5db !important;
+            background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%) !important;
+            color: white !important;
+            font-weight: 700 !important;
+            cursor: pointer !important;
+        }
+
+        .search-bar select option {
+            background: white;
+            color: #1f2937;
+        }
+
+        .search-bar input {
+            padding: 16px !important;
+            font-size: 15px !important;
+            border: 2px solid #d1d5db !important;
+        }
+
+        .search-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        /* پیام شناور کنار آیتم */
+        .item-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 16px 24px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 14px;
+            z-index: 100;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            animation: popIn 0.3s ease-out;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .item-message.success {
+            background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            color: white;
+        }
+
+        .item-message.info {
+            background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+            color: white;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes popOut {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+        }
+
+        .item-message.hiding {
+            animation: popOut 0.3s ease-in forwards;
+        }
+
+        .result-item {
+            background: #f9fafb;
+            padding: 18px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .result-item.deleting {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .result-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .result-header h3 {
+            color: #1f2937;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .result-header p {
+            color: #6b7280;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #fecaca;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 12px;
+        }
+
+        .result-field {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .result-field strong {
+            display: block;
+            color: #6b7280;
+            font-size: 10px;
+            margin-bottom: 5px;
+        }
+
+        .result-field span {
+            color: #1f2937;
+            font-weight: 700;
+        }
+
+        .phone-buttons {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .info-box {
+            background: #dbeafe;
+            border: 2px solid #60a5fa;
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .info-box p {
+            color: #1e40af;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .empty-state-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state h3 {
+            color: #6b7280;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: #9ca3af;
+            font-size: 13px;
+        }
+
+        @media (max-width: 640px) {
+            .form-row,
+            .search-buttons,
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .phone-buttons {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-icon">📋</div>
+            <h1>فرم اطلاعات خانوادگی</h1>
+            <p>اطلاعات خود را وارد کنید و در Google Sheets ذخیره کنید</p>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" onclick="showForm()">📝 ثبت اطلاعات</div>
+            <div class="tab" onclick="showSearch()">🔍 جستجو و مدیریت</div>
+        </div>
+
+        <!-- Form Section -->
+        <div id="formSection" class="card">
+            <div class="card-header">
+                <h2>➕ ثبت اطلاعات جدید</h2>
+            </div>
+
+            <div id="message"></div>
+
+            <div class="form-group">
+                <label>نام *</label>
+                <input type="text" id="name" placeholder="نام دانش‌آموز">
+            </div>
+
+            <div class="form-group">
+                <label>نام خانوادگی *</label>
+                <input type="text" id="lastname" placeholder="نام خانوادگی">
+            </div>
+
+            <div class="form-group">
+                <label>نام پدر</label>
+                <input type="text" id="fatherName" placeholder="نام پدر (اختیاری)">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>تلفن پدر</label>
+                    <input type="tel" id="fatherPhone" placeholder="09xxxxxxxxx">
+                </div>
+                <div class="form-group">
+                    <label>تلفن مادر</label>
+                    <input type="tel" id="motherPhone" placeholder="09xxxxxxxxx">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>شماره شاد</label>
+                <input type="text" id="shadNumber" placeholder="شماره شاد (اختیاری)">
+            </div>
+
+            <div class="form-group">
+                <label>شغل پدر</label>
+                <input 
+                    type="text" 
+                    id="fatherJob" 
+                    placeholder="تایپ کنید... (مثلاً: کارمند، پزشک، معلم)" 
+                    list="jobSuggestions"
+                    autocomplete="off"
+                >
+                <datalist id="jobSuggestions">
+                    <option value="کارمند">
+                    <option value="آزاد">
+                    <option value="بازنشسته">
+                    <option value="پزشک">
+                    <option value="مهندس">
+                    <option value="معلم">
+                    <option value="تاجر">
+                    <option value="راننده">
+                    <option value="کشاورز">
+                    <option value="فروشنده">
+                    <option value="کارگر">
+                    <option value="پیمانکار">
+                    <option value="نجار">
+                    <option value="آهنگر">
+                    <option value="برقکار">
+                    <option value="لوله‌کش">
+                    <option value="خیاط">
+                    <option value="آرایشگر">
+                    <option value="نانوا">
+                    <option value="مکانیک">
+                </datalist>
+                <small style="color: #6b7280; font-size: 11px; display: block; margin-top: 5px;">
+                    💡 شروع به تایپ کنید تا پیشنهادات نمایش داده شود
+                </small>
+            </div>
+
+            <button class="btn" onclick="submitForm()">💾 ذخیره در Google Sheets</button>
+
+            <div class="info-box">
+                <p>💡 فقط نام و نام خانوادگی الزامی است - سایر فیلدها اختیاری</p>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div id="searchSection" class="card hidden">
+            <div class="card-header">
+                <h2>🔍 جستجو و مدیریت</h2>
+            </div>
+
+            <div id="searchMessage"></div>
+
+            <div class="search-bar">
+                <div>
+                    <label>🔍 جستجو بر اساس:</label>
+                    <select id="searchField">
+                        <option value="lastname">نام خانوادگی</option>
+                        <option value="fatherJob">شغل پدر</option>
+                        <option value="name">نام</option>
+                        <option value="fatherName">نام پدر</option>
+                    </select>
+                </div>
+                <div>
+                    <label>✍️ عبارت جستجو:</label>
+                    <input type="text" id="searchInput" placeholder="شروع به تایپ کنید..." oninput="performSearch()">
+                </div>
+            </div>
+
+            <div class="search-buttons">
+                <button class="btn btn-success" onclick="loadFromSheets()">🔄 بارگذاری مجدد</button>
+                <button class="btn btn-secondary" onclick="exportCSV()">📥 دانلود CSV</button>
+            </div>
+
+            <div id="results" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwAsu5LSFrnMXaTdakZGfNsTXOD_VNyGTZ8njc4nVE67MKe0HG56Latizrzb3jwa14O/exec';
+        let allData = [];
+
+        function showForm() {
+            document.getElementById('formSection').classList.remove('hidden');
+            document.getElementById('searchSection').classList.add('hidden');
+            document.querySelectorAll('.tab')[0].classList.add('active');
+            document.querySelectorAll('.tab')[1].classList.remove('active');
+        }
+
+        function showSearch() {
+            document.getElementById('formSection').classList.add('hidden');
+            document.getElementById('searchSection').classList.remove('hidden');
+            document.querySelectorAll('.tab')[0].classList.remove('active');
+            document.querySelectorAll('.tab')[1].classList.add('active');
+            
+            // بارگذاری خودکار داده‌ها
+            if (allData.length === 0) {
+                loadFromSheets();
+            } else {
+                // نمایش پیام اولیه
+                displayEmptyState('loaded');
+            }
+        }
+
+        function showMessage(type, text, target = 'message') {
+            // اگر target مشخص نیست، پیام شناور نشون بده
+            if (target === 'floating') {
+                showFloatingMessage(type, text);
+                return;
+            }
+            
+            // پیام معمولی در کارت
+            const msg = document.getElementById(target);
+            if (msg) {
+                msg.className = `message ${type}`;
+                msg.textContent = text;
+                msg.classList.remove('hidden');
+                
+                const timeout = type === 'info' ? 3000 : 5000;
+                setTimeout(() => msg.classList.add('hidden'), timeout);
+            }
+        }
+
+        function showFloatingMessage(type, text) {
+            // حذف پیام‌های قبلی
+            const existingMessages = document.querySelectorAll('.floating-message');
+            existingMessages.forEach(msg => msg.remove());
+            
+            // ساخت پیام جدید
+            const message = document.createElement('div');
+            message.className = `floating-message ${type}`;
+            message.textContent = text;
+            
+            document.body.appendChild(message);
+            
+            // حذف پیام بعد از 4 ثانیه
+            setTimeout(() => {
+                message.classList.add('hiding');
+                setTimeout(() => message.remove(), 300);
+            }, 4000);
+        }
+
+        async function submitForm() {
+            const name = document.getElementById('name').value.trim();
+            const lastname = document.getElementById('lastname').value.trim();
+
+            if (!name || !lastname) {
+                showFloatingMessage('error', '⚠️ نام و نام خانوادگی الزامی است');
+                return;
+            }
+
+            // نمایش پیام شناور در حال ارسال
+            showFloatingMessage('info', '⏳ در حال ارسال به Google Sheets...');
+
+            const formData = {
+                name,
+                lastname,
+                fatherName: document.getElementById('fatherName').value.trim(),
+                fatherPhone: document.getElementById('fatherPhone').value.trim(),
+                motherPhone: document.getElementById('motherPhone').value.trim(),
+                shadNumber: document.getElementById('shadNumber').value.trim(),
+                fatherJob: document.getElementById('fatherJob').value
+            };
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = SCRIPT_URL;
+            form.style.display = 'none';
+
+            Object.keys(formData).forEach(key => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = formData[key];
+                form.appendChild(input);
+            });
+
+            const iframe = document.createElement('iframe');
+            iframe.name = 'responseFrame';
+            iframe.style.display = 'none';
+            
+            let submitted = false;
+            
+            iframe.onload = () => {
+                if (!submitted) {
+                    submitted = true;
+                    setTimeout(() => {
+                        try {
+                            document.body.removeChild(form);
+                            document.body.removeChild(iframe);
+                        } catch(e) {}
+                        
+                        showFloatingMessage('success', `✅ "${name} ${lastname}" با موفقیت ثبت شد!`);
+                        
+                        // پاک کردن فرم
+                        document.querySelectorAll('#formSection input').forEach(i => i.value = '');
+                    }, 1200);
+                }
+            };
+
+            iframe.onerror = () => {
+                try {
+                    document.body.removeChild(form);
+                    document.body.removeChild(iframe);
+                } catch(e) {}
+                showFloatingMessage('error', '❌ خطا در ارسال! لطفاً دوباره تلاش کنید');
+            };
+
+            document.body.appendChild(iframe);
+            document.body.appendChild(form);
+            form.target = 'responseFrame';
+            form.submit();
+        }
+
+        function loadFromSheets() {
+            displayEmptyState('loading');
+            
+            const timestamp = Date.now();
+            const script = document.createElement('script');
+            script.src = `${SCRIPT_URL}?callback=handleData&t=${timestamp}`;
+
+            window.handleData = (data) => {
+                try {
+                    document.body.removeChild(script);
+                } catch(e) {}
+                delete window.handleData;
+
+                if (data && Array.isArray(data)) {
+                    allData = data;
+                    document.getElementById('searchInput').value = '';
+                    displayEmptyState('loaded');
+                    
+                    // پیام شناور فقط برای بارگذاری مجدد
+                    const searchSection = document.getElementById('searchSection');
+                    if (!searchSection.classList.contains('hidden')) {
+                        showFloatingMessage('success', `✅ ${data.length} رکورد بارگذاری شد!`);
+                    }
+                } else {
+                    showFloatingMessage('error', '❌ خطا در دریافت داده‌ها');
+                    displayEmptyState('loaded');
+                }
+            };
+
+            script.onerror = () => {
+                try {
+                    document.body.removeChild(script);
+                } catch(e) {}
+                delete window.handleData;
+                showFloatingMessage('error', '❌ خطا در اتصال به Google Sheets!');
+            };
+
+            document.body.appendChild(script);
+        }
+
+        function performSearch() {
+            const term = document.getElementById('searchInput').value.toLowerCase().trim();
+            const field = document.getElementById('searchField').value;
+
+            // اگر خالی است، پیام نمایش بده
+            if (!term) {
+                displayEmptyState(allData.length > 0 ? 'loaded' : 'start');
+                return;
+            }
+
+            // فیلتر کردن
+            const filtered = allData.filter(item => 
+                item[field]?.toLowerCase().includes(term)
+            );
+
+            displayResults(filtered, term);
+        }
+
+        function displayEmptyState(type) {
+            const results = document.getElementById('results');
+            
+            if (type === 'loading') {
+                results.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⏳</div>
+                        <h3>در حال بارگذاری...</h3>
+                        <p>لطفاً صبر کنید</p>
+                    </div>
+                `;
+            } else if (type === 'loaded') {
+                results.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">✅</div>
+                        <h3>داده‌ها بارگذاری شد</h3>
+                        <p>${allData.length} رکورد آماده جستجو</p>
+                        <p style="margin-top:10px;color:#6b7280;">شروع به تایپ کنید تا نتایج نمایش داده شود</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayResults(data, searchTerm) {
+            const results = document.getElementById('results');
+            
+            if (data.length === 0) {
+                results.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">😔</div>
+                        <h3>نتیجه‌ای یافت نشد</h3>
+                        <p>عبارت دیگری را جستجو کنید</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `<div class="message info">🔍 ${data.length} نتیجه برای "${searchTerm}" یافت شد</div>`;
+
+            html += data.map((item) => `
+                <div class="result-item">
+                    <div class="result-header">
+                        <div>
+                            <h3>${item.name} ${item.lastname}</h3>
+                            <p>فرزند ${item.fatherName || '---'}</p>
+                            ${item.timestamp ? `<p style="font-size:10px;margin-top:4px">⏰ ${item.timestamp}</p>` : ''}
+                        </div>
+                        <button class="delete-btn" onclick="deleteRecord('${item.name}', '${item.lastname}', this)">🗑️ حذف</button>
+                    </div>
+                    <div class="result-grid">
+                        <div class="result-field" style="background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);">
+                            <strong>📞 تلفن پدر</strong>
+                            <span>${item.fatherPhone || '---'}</span>
+                            ${item.fatherPhone ? `
+                                <div class="phone-buttons">
+                                    <button class="btn btn-small btn-call" onclick="makeCall('${item.fatherPhone}')">📞 تماس</button>
+                                    <button class="btn btn-small btn-message" onclick="sendMessage('${item.fatherPhone}')">💬 پیام</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="result-field" style="background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);">
+                            <strong>📱 تلفن مادر</strong>
+                            <span>${item.motherPhone || '---'}</span>
+                            ${item.motherPhone ? `
+                                <div class="phone-buttons">
+                                    <button class="btn btn-small btn-call" onclick="makeCall('${item.motherPhone}')">📞 تماس</button>
+                                    <button class="btn btn-small btn-message" onclick="sendMessage('${item.motherPhone}')">💬 پیام</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="result-field" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);">
+                            <strong>💬 شماره شاد</strong>
+                            <span>${item.shadNumber || '---'}</span>
+                        </div>
+                        <div class="result-field" style="background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);">
+                            <strong>💼 شغل پدر</strong>
+                            <span>${item.fatherJob || '---'}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            results.innerHTML = html;
+        }
+
+        function deleteRecord(studentName, studentLastname, buttonElement) {
+            if (confirm(`آیا از حذف "${studentName} ${studentLastname}" مطمئن هستید؟\n\n⚠️ این عمل غیرقابل بازگشت است!`)) {
+                // پیدا کردن کارت مربوطه
+                const resultItem = buttonElement.closest('.result-item');
+                resultItem.classList.add('deleting');
+                
+                // نمایش پیام در حال حذف
+                showItemMessage(resultItem, 'info', '⏳ در حال حذف از Google Sheets...');
+                
+                // ارسال درخواست حذف به Google Sheets
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = SCRIPT_URL;
+                form.style.display = 'none';
+                
+                // اضافه کردن پارامترها
+                const actionInput = document.createElement('input');
+                actionInput.type = 'hidden';
+                actionInput.name = 'action';
+                actionInput.value = 'delete';
+                form.appendChild(actionInput);
+                
+                const nameInput = document.createElement('input');
+                nameInput.type = 'hidden';
+                nameInput.name = 'name';
+                nameInput.value = studentName;
+                form.appendChild(nameInput);
+                
+                const lastnameInput = document.createElement('input');
+                lastnameInput.type = 'hidden';
+                lastnameInput.name = 'lastname';
+                lastnameInput.value = studentLastname;
+                form.appendChild(lastnameInput);
+                
+                const iframe = document.createElement('iframe');
+                iframe.name = 'deleteFrame';
+                iframe.style.display = 'none';
+                
+                let deleted = false;
+                
+                iframe.onload = () => {
+                    if (!deleted) {
+                        deleted = true;
+                        setTimeout(() => {
+                            try {
+                                document.body.removeChild(form);
+                                document.body.removeChild(iframe);
+                            } catch(e) {}
+                            
+                            // پیدا کردن ایندکس و حذف از آرایه محلی
+                            const index = allData.findIndex(item => 
+                                item.name === studentName && item.lastname === studentLastname
+                            );
+                            
+                            if (index !== -1) {
+                                allData.splice(index, 1);
+                            }
+                            
+                            // نمایش پیام موفقیت
+                            showItemMessage(resultItem, 'success', `✅ "${studentName} ${studentLastname}" حذف شد`);
+                            
+                            // حذف کارت از نمایش
+                            setTimeout(() => {
+                                performSearch();
+                            }, 1500);
+                        }, 800);
+                    }
+                };
+                
+                iframe.onerror = () => {
+                    try {
+                        document.body.removeChild(form);
+                        document.body.removeChild(iframe);
+                    } catch(e) {}
+                    resultItem.classList.remove('deleting');
+                    showItemMessage(resultItem, 'error', '❌ خطا در حذف از Sheets');
+                };
+                
+                document.body.appendChild(iframe);
+                document.body.appendChild(form);
+                form.target = 'deleteFrame';
+                form.submit();
+            }
+        }
+
+        function showItemMessage(element, type, text) {
+            // حذف پیام‌های قبلی در این آیتم
+            const existingMsg = element.querySelector('.item-message');
+            if (existingMsg) existingMsg.remove();
+            
+            // ساخت پیام جدید
+            const message = document.createElement('div');
+            message.className = `item-message ${type}`;
+            message.textContent = text;
+            
+            element.appendChild(message);
+            
+            // اگر پیام info است، نگه‌داریش
+            if (type === 'info') return;
+            
+            // حذف پیام بعد از 1.2 ثانیه
+            setTimeout(() => {
+                message.classList.add('hiding');
+                setTimeout(() => message.remove(), 300);
+            }, 1200);
+        }
+
+        function makeCall(phone) {
+            if (phone) {
+                window.location.href = `tel:${phone}`;
+            }
+        }
+
+        function sendMessage(phone) {
+            if (phone) {
+                window.location.href = `sms:${phone}`;
+            }
+        }
+
+        function exportCSV() {
+            if (allData.length === 0) {
+                showFloatingMessage('error', '⚠️ داده‌ای برای خروجی وجود ندارد');
+                return;
+            }
+
+            const headers = 'نام,نام خانوادگی,نام پدر,تلفن پدر,تلفن مادر,شماره شاد,شغل پدر\n';
+            const rows = allData.map(s => 
+                `${s.name},${s.lastname},${s.fatherName},${s.fatherPhone},${s.motherPhone},${s.shadNumber},${s.fatherJob}`
+            ).join('\n');
+            
+            const csv = '\uFEFF' + headers + rows;
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `data_${Date.now()}.csv`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showFloatingMessage('success', `✅ فایل CSV با ${allData.length} رکورد دانلود شد`);
+        }
+
+        // بارگذاری اولیه داده‌ها هنگام بارگذاری صفحه
+        window.addEventListener('load', function() {
+            // اگر صفحه در حالت جستجو باز شده، داده‌ها رو بارگذاری کن
+            const hash = window.location.hash;
+            if (hash === '#search') {
+                showSearch();
+            }
+        });
+    </script>
+</body>
+</html>
